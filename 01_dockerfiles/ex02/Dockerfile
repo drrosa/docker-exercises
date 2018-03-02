@@ -1,10 +1,11 @@
 FROM ruby
 RUN apt-get update -y \
-	&& apt-get install libgmp-dev libgsl0-dev nodejs -y \
-	&& gem install bundler rails
+	&& apt-get install nodejs -y \
+	&& gem install rails
 EXPOSE 3000
 ONBUILD COPY app/ /opt/app
-ONBUILD WORKDIR /opt/app
+WORKDIR /opt/app
 ONBUILD RUN bundle install \
 			&& rake db:migrate \
-			rake db:seed
+			&& rake db:setup \
+			&& rake db:seed
